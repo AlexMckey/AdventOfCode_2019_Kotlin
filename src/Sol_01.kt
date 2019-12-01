@@ -16,9 +16,9 @@ fun calcRecFuel(mass: Int, acc: Int = 0): Int {
 fun main() {
     val fileName = "out/production/KtAOC2019/input01.txt"
     val inputStream: BufferedReader = File(fileName).bufferedReader()
-    val masses = inputStream.lines().map{it.toInt()}.toList()
+    val masses = inputStream.lines().map { it.toInt() }.toList()
     val res1 = masses.map { calcFuel(it) }.sum()
     println(res1) //3342351
     val res2 = masses.map { calcRecFuel(it) }.sum()
-    println(res2) //
+    println(res2) //5010664
 }
