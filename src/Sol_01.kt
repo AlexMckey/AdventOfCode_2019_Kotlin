@@ -5,6 +5,7 @@ import kotlin.streams.toList
 fun main() {
     val fileName = "out/production/KtAOC2019/input01.txt"
     val inputStream: BufferedReader = File(fileName).bufferedReader()
-    val res1 = inputStream.lines().map { Math.floorDiv(it.toInt(), 3) - 2 }.toList().sum()
+    val masses = inputStream.lines().map{it.toInt()}.toList()
+    val res1 = masses.map { Math.floorDiv(it, 3) - 2 }.sum()
     println(res1) //3342351
 }
