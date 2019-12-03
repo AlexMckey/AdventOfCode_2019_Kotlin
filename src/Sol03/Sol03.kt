@@ -75,5 +75,6 @@ fun main() {
     val res1 = distances.min()
     println(res1) //1064
 
-
+    val res2 = intersectPoints.map { w1pts.indexOf(it) + w2pts.indexOf(it) + 4 }.min()
+    println(res2) //25676
 }
