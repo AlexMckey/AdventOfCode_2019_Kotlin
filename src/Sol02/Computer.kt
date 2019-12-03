@@ -69,7 +69,7 @@ fun main() {
             cmp.runProgram()
             //println("(noun:$n, verb:$v) = ${cmp.res}")
             cmp.res == 19690720
-        }.findFirst().orElse(0 to 0)
+        }.findAny().orElse(0 to 0)
         .let { (n, v) -> n * 100 + v }
     println(res2) //4559
 }
