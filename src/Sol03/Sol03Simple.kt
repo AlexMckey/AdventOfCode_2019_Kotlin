@@ -46,9 +46,9 @@ fun main() {
     println(res2 ?: 0)
 
     val stepsToIntersectPoints = intersectPoints.map { p ->
-        wire1.keys.indexOf(p) + wire2.keys.indexOf(p)
+        (wire1.filterKeys { it == p }.minBy { it.value }?.value ?: -1) +
+                (wire2.filterKeys { it == p }.minBy { it.value }?.value ?: -1)
     }
     val res3 = stepsToIntersectPoints.min()
     println(res3 ?: 0)
 }
-
