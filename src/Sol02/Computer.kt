@@ -6,7 +6,7 @@ class Computer(program: IntArray?) {
     var memory = intArrayOf(99)
     private var ip: Int = 0
     private var step: Int = 0
-    private val opers = hashMapOf<Int, (Int, Int) -> Int>(
+    private val instructions = hashMapOf<Int, (Int, Int) -> Int>(
         1 to { a, b -> a + b },
         2 to { a, b -> a * b },
         99 to { _, _ -> 0 }
@@ -23,14 +23,14 @@ class Computer(program: IntArray?) {
     private fun doOneStep(opCode: Int): Int {
         val f = memory[memory[ip + 1]]
         val s = memory[memory[ip + 2]]
-        return opers[opCode]?.invoke(f, s) ?: throw Exception("Такой команды не существует: $opCode")
+        return instructions[opCode]?.invoke(f, s) ?: throw Exception("Такой команды не существует: $opCode")
     }
 
     fun runProgram() {
         step = 0
         ip = 0
         while (ip < memory.size - 4
-            && opers.containsKey(memory[ip])
+            && instructions.containsKey(memory[ip])
             && (memory[ip]) != 99
         ) {
             if (memory[ip + 1] < memory.size - 1
