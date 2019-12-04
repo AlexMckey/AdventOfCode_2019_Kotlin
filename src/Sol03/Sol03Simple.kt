@@ -40,13 +40,16 @@ fun main() {
     println(res1 ?: 0) //1064
 
     val pathToIntersectPoints = intersectPoints.map { p ->
+        //println("${wire1[p]} : ${wire2[p]}")
+        //println("${wire1.keys.indexOf(p)} : ${wire2.keys.indexOf(p)}")
         wire1.getOrDefault(p, -1) + wire2.getOrDefault(p, -1)
     }
     val res2 = pathToIntersectPoints.min()
-    println(res2 ?: 0)
+    println(res2 ?: 0) //25676
 
     val stepsToIntersectPoints = intersectPoints.map { p ->
-        wire1.keys.indexOf(p) + wire2.keys.indexOf(p)
+        (wire1.filterKeys { it == p }.minBy { it.value }?.value
+            ?: 0) + (wire2.filterKeys { it == p }.minBy { it.value }?.value ?: 0)
     }
     val res3 = stepsToIntersectPoints.min()
     println(res3 ?: 0)
