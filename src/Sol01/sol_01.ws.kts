@@ -1,7 +1,7 @@
 package Sol01
 
 val l = listOf(14, 1969, 100756)
-l.sumBy { Math.floorDiv(it, 3) - 2 }
+l.sumBy{ Math.floorDiv(it, 3) - 2 }
 fun calcFuel(mass: Int): Int {
     return Math.floorDiv(mass, 3) - 2
 }
