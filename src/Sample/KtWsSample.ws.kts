@@ -1,4 +1,6 @@
-val l = listOf(1,2,3,4,5)
+package Sample
+
+val l = listOf(1, 2, 3, 4, 5)
 l.contains(2)
 l.slice(2..4)
 l.windowed(2)
