@@ -72,8 +72,11 @@ fun main() {
 
     val distances = intersectPoints.map { manhattanDistance(it) }.toList()
 
-    val res1 = distances.min()
+    val res1 = distances.min()!!
     println(res1) //1064
 
-
+    val minStepToIntersect = intersectPoints.map {
+        w1pts.indexOf(it) + w2pts.indexOf(it) + 4
+    }.min()!!
+    println(minStepToIntersect) //25676
 }
