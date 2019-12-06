@@ -11,7 +11,7 @@ private fun Char.toParameterMode(): ParameterMode {
     }
 }
 
-class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<Int>) {
+class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<Int>? = null) {
     private var memory = program
     operator fun get(address: Int) = memory[address]
     operator fun set(address: Int, value: Int) {
@@ -54,12 +54,22 @@ class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<I
                 ip += 4
             }
             3 -> {
-                memory[ip, 1] = input.next()
+                memory[ip, 1] = input?.next()!!
                 ip += 2
             }
             4 -> {
                 output.add(memory[ip, 1])
                 ip += 2
+            }
+            5 -> if (memory[ip, 1] != 0) ip = memory[ip, 2] else ip += 3
+            6 -> if (memory[ip, 1] == 0) ip = memory[ip, 2] else ip += 3
+            7 -> {
+                memory[ip, 3] = if (memory[ip, 1] < memory[ip, 2]) 1 else 0
+                ip += 4
+            }
+            8 -> {
+                memory[ip, 3] = if (memory[ip, 1] == memory[ip, 2]) 1 else 0
+                ip += 4
             }
             99 -> {
                 isHalt = true
