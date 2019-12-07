@@ -1,5 +1,7 @@
 package Sol03
 
+import AOCLib.Point
+import AOCLib.manhattanDistance
 import java.io.File
 import kotlin.streams.toList
 

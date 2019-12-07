@@ -6,8 +6,8 @@ fun main() {
     val fileName = "out/production/KtAOC2019/Sol06/input06.txt"
     val inputStream = File(fileName).bufferedReader().readLines()
 
-    val m = inputStream.map { it.substringBefore(')') to it.substringAfter(')') }
-        .map { p -> p.second to p.first }.groupBy({ it.first }, { it.second })
+    val m = inputStream.map { it.substringAfter(')') to it.substringBefore(')') }
+        .groupBy({ it.first }, { it.second })
 
     fun backTree(m: Map<String, List<String>>, cur: String, acc: List<String> = emptyList()): List<String> {
         return if (!m.containsKey(cur)) acc// + "COM"

@@ -1,44 +1,13 @@
 package Sol03
 
+import AOCLib.Point
+import AOCLib.manhattanDistance
+import AOCLib.scanM
 import java.io.File
-import kotlin.math.abs
 import kotlin.streams.toList
-
-data class Point(val x: Int, val y: Int) {
-    companion object {
-        fun incXPoint(): (Point) -> Point = { p -> Point(p.x + 1, p.y) }
-        fun decXPoint(): (Point) -> Point = { p -> Point(p.x - 1, p.y) }
-        fun incYPoint(): (Point) -> Point = { p -> Point(p.x, p.y + 1) }
-        fun decYPoint(): (Point) -> Point = { p -> Point(p.x, p.y - 1) }
-    }
-}
-
-fun manhattanDistance(p1: Point, p2: Point = Point(0, 0)): Int {
-    return abs(p1.x - p2.y) + abs(p1.y - p2.y)
-}
 
 fun parsePart(part: String): Pair<String, Int> {
     return part.let { it.substring(0, 1) to it.substring(1).toInt() }
-}
-
-fun <S, T> List<T>.scanM(acc: S, op: (S, T) -> S): List<S> {
-    var accumulator: S = acc
-    return this.mapIndexed { _, x ->
-        accumulator = op(accumulator, x)
-        accumulator
-    }
-}
-
-fun <S, T> List<T>.scan(acc: S, op: (S, T) -> S): List<S> {
-    fun tempFun(accumulator: S, list: List<T>, op: (S, T) -> S): List<S> {
-        val result = op(accumulator, list.first())
-        val cdr = list.drop(1)
-        if (cdr.isNotEmpty()) {
-            return listOf(result) + tempFun(result, cdr, op)
-        }
-        return listOf(result)
-    }
-    return listOf(acc) + tempFun(acc, this, op)
 }
 
 fun partPoints(dir: String, cnt: Int): List<(Point) -> Point> {
