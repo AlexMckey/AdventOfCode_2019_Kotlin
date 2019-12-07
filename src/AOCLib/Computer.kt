@@ -4,6 +4,10 @@ enum class ParameterMode {
     Position, Immediate
 }
 
+enum class CompState {
+    Running, Halt, InputSuspend
+}
+
 private fun Char.toParameterMode(): ParameterMode {
     return when (this) {
         '1' -> ParameterMode.Immediate
@@ -11,7 +15,7 @@ private fun Char.toParameterMode(): ParameterMode {
     }
 }
 
-class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<Int>? = null) {
+class Computer(program: IntArray = intArrayOf(99)) {
     private var memory = program
     operator fun get(address: Int) = memory[address]
     operator fun set(address: Int, value: Int) {
@@ -38,8 +42,9 @@ class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<I
 
     private var ip: Int = 0
     private var step: Int = 0
-    private var isHalt: Boolean = false
-    var output: MutableCollection<Int> = mutableListOf()
+    var state: CompState = CompState.Halt
+    var input = mutableListOf<Int>()
+    var output = mutableListOf<Int>()
     val result: Int
         get() = memory[0]
 
@@ -54,8 +59,12 @@ class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<I
                 ip += 4
             }
             3 -> {
-                memory[ip, 1] = input?.next()!!
-                ip += 2
+                if (input.isNotEmpty()) {
+                    memory[ip, 1] = input[0]
+                    input.removeAt(0)
+                    state = CompState.Running
+                    ip += 2
+                } else state = CompState.InputSuspend
             }
             4 -> {
                 output.add(memory[ip, 1])
@@ -72,16 +81,17 @@ class Computer(program: IntArray = intArrayOf(99), private val input: Iterator<I
                 ip += 4
             }
             99 -> {
-                isHalt = true
+                state = CompState.Halt
                 ip += 1
             }
         }
-        step++
     }
 
     fun runProgram() {
-        step = 0
-        ip = 0
-        while (!isHalt) doOneStep()
+        state = CompState.Running
+        while (state == CompState.Running) {
+            doOneStep()
+            step++
+        }
     }
 }
