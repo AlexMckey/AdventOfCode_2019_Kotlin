@@ -1,4 +1,4 @@
-package Sol06
+package AOCLib
 
 class Tree<T>(val value: T) {
     val children: MutableList<Tree<T>> = mutableListOf()
