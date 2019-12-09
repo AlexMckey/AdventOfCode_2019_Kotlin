@@ -8,20 +8,20 @@ fun main() {
 
     val w = 25
     val h = 6
-    val layer = inputStream.windowed(w * h, w * h).map { it.toCharArray().toList() }
-        .map { it.groupingBy { it }.eachCount().toMap() }
+    val res1 = inputStream.chunked(w * h)
+        .map { it.groupingBy { it }.eachCount() }
         .minBy { it.getOrDefault('0', w * h) }
+        .let { it?.get('1')!! * it['2']!! }
 
-    val res1 = layer?.get('1')!! * layer.get('2')!!
     println(res1) //1088
 
-    val res2 = inputStream.windowed(w * h, w * h)
-        .map { it.withIndex().toList() }
-        .flatten().groupBy({ i -> i.index }, { v -> v.value })
-        .values.map { it.dropWhile { c -> c == '2' }.take(1) }
-        .flatten().windowed(w, w).map { it.joinToString("") }
-        .joinToString("\n").replace('0', ' ').replace('1', '#')
-    println(res2)
+    inputStream.chunked(w * h)
+        .flatMap { it.withIndex() }
+        .groupBy({ i -> i.index }, { v -> v.value })
+        .values.asSequence()
+        .map { it.dropWhile { c -> c == '2' }.take(1) }
+        .flatten().chunked(w).map { it.joinToString("") }
+        .forEach { println(it.replace('0', ' ').replace('1', '#')) }
 //    #     ##  #   ##  # ###
 //    #    #  # #   ##  # #  #
 //    #    #     # # #### ###

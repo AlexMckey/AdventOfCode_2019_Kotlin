@@ -1,17 +1,14 @@
-package Sol05
+package Sol09
 
 import AOCLib.Computer
 import java.io.File
 
 fun main() {
-    val fileName = "out/production/KtAOC2019/Sol05/input05.txt"
+    val fileName = "out/production/KtAOC2019/Sol09/input09.txt"
     val inputStream = File(fileName).bufferedReader().readLine()
-    //val inputStream = "1002,4,3,4,33"
-    //val inputStream = "3,0,4,0,99"
-    //val inputStream = "3,9,8,9,10,9,4,9,99,-1,8"
-    //val inputStream = "3,9,7,9,10,9,4,9,99,-1,8"
-    //val inputStream = "3,3,1108,-1,8,3,4,3,99"
-    //val inputStream = "3,3,1107,-1,8,3,4,3,99"
+    //val inputStream = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99" //Ок
+    //val inputStream = "1102,34915192,34915192,7,4,7,99,0" //1219070632396864
+    //val inputStream = "104,1125899906842624,99" //1125899906842624
     val inputProgram = inputStream.split(',').map { it.toLong() }.toLongArray()
 
     val comp1 = Computer(inputProgram.clone())
@@ -19,14 +16,12 @@ fun main() {
     comp1.runProgram()
 
     val res1 = comp1.output.toString()
-
-    println(res1) //7259358
+    println(res1) //2427443564
 
     val comp2 = Computer(inputProgram.clone())
-    comp2.input.add(5)
+    comp2.input.add(2)
     comp2.runProgram()
 
     val res2 = comp2.output.toString()
-
-    println(res2) //11826654
+    println(res2) //87221
 }
