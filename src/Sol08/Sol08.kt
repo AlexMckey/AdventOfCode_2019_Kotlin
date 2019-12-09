@@ -15,11 +15,17 @@ fun main() {
     val res1 = layer?.get('1')!! * layer.get('2')!!
     println(res1) //1088
 
-    val li = inputStream.windowed(w * h, w * h)
+    val res2 = inputStream.windowed(w * h, w * h)
         .map { it.withIndex().toList() }
         .flatten().groupBy({ i -> i.index }, { v -> v.value })
         .values.map { it.dropWhile { c -> c == '2' }.take(1) }
         .flatten().windowed(w, w).map { it.joinToString("") }
         .joinToString("\n").replace('0', ' ').replace('1', '#')
-    println(li)
+    println(res2)
+//    #     ##  #   ##  # ###
+//    #    #  # #   ##  # #  #
+//    #    #     # # #### ###
+//    #    # ##   #  #  # #  #
+//    #    #  #   #  #  # #  #
+//    ####  ###   #  #  # ###
 }
