@@ -5,10 +5,10 @@ import AOCLib.Computer
 import AOCLib.permute
 import java.io.File
 
-class ThrustAmplifier(inputProgram: IntArray, inputPhases: List<Int>, withBackLink: Boolean = false) {
-    var output = mutableListOf<Int>()
+class ThrustAmplifier(inputProgram: LongArray, inputPhases: List<Long>, withBackLink: Boolean = false) {
+    var output = mutableListOf<Long>()
     private val amps: List<Computer>
-    private val phases: List<Int>
+    private val phases: List<Long>
 
     init {
         amps = arrayListOf(
@@ -54,10 +54,10 @@ fun main() {
     //val phaseStr = "9,8,7,6,5" //139629729
     //val inputStream = "3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10"
     //val phaseStr = "9,7,8,5,6" //18216
-    val inputProgram = inputStream.split(',').map { it.toInt() }.toIntArray()
+    val inputProgram = inputStream.split(',').map { it.toLong() }.toLongArray()
     //val inputPhases = phaseStr.split(',').map { it.toInt() }
 
-    val part1phases = listOf(0, 1, 2, 3, 4).permute().shuffled()
+    val part1phases = listOf(0L, 1, 2, 3, 4).permute().shuffled()
     val part1maxOutput = part1phases.map {
         val thrustAmp = ThrustAmplifier(inputProgram, it)
         thrustAmp.runAmps()
@@ -70,7 +70,7 @@ fun main() {
 //    val thrustAmpWithBackLink = ThrustAmplifier(inputProgram,inputPhases,true)
 //    thrustAmpWithBackLink.runAmps()
 
-    val part2phases = listOf(5, 6, 7, 8, 9).permute().shuffled()
+    val part2phases = listOf(5L, 6, 7, 8, 9).permute().shuffled()
     val part2maxOutput = part2phases.map {
         val thrustAmpWithBackLink = ThrustAmplifier(inputProgram, it, true)
         thrustAmpWithBackLink.runAmps()

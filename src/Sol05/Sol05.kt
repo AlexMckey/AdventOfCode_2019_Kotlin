@@ -12,7 +12,7 @@ fun main() {
     //val inputStream = "3,9,7,9,10,9,4,9,99,-1,8"
     //val inputStream = "3,3,1108,-1,8,3,4,3,99"
     //val inputStream = "3,3,1107,-1,8,3,4,3,99"
-    val inputProgram = inputStream.split(',').map { it.toInt() }.toIntArray()
+    val inputProgram = inputStream.split(',').map { it.toLong() }.toLongArray()
 
     val comp1 = Computer(inputProgram.clone())
     comp1.input.add(1)
