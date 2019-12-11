@@ -21,7 +21,10 @@ fun main() {
         .values.asSequence()
         .map { it.dropWhile { c -> c == '2' }.take(1) }
         .flatten().chunked(w).map { it.joinToString("") }
-        .forEach { println(it.replace('0', ' ').replace('1', '#')) }
+        .forEach {
+            it.replace('0', ' ').replace('1', '#')
+                .also { r -> println(r) }
+        }
 //    #     ##  #   ##  # ###
 //    #    #  # #   ##  # #  #
 //    #    #     # # #### ###

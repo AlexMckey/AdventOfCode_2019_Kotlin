@@ -1,41 +1,51 @@
-fun gcd(a: Long, b: Long): Long = if (b == 0.toLong()) a else gcd(b, a % b)
-gcd(2, 4)
+import AOCLib.Point
 
-data class Pos(val x: Int, val y: Int) {
-    fun angle(other: Pos) =
-        if (other.y - this.y == 0)
-            0.0
-        else 1.0 * (other.x - this.x) / (other.y - this.y)
-}
-
-val testData = "......#.#.\n" +
-        "#..#.#....\n" +
-        "..#######.\n" +
-        ".#.#.###..\n" +
-        ".#..#.....\n" +
-        "..#....#.#\n" +
-        "#..#....#.\n" +
-        ".##.#..###\n" +
-        "##...#..#.\n" +
-        ".#....####"
-val s = testData.split('\n')
-val asteriods = s.mapIndexed { y, str ->
-    str.mapIndexed { x, c -> Sol10.Pos(x, y) to c }
-}
-    .flatten().filter { it.second == '#' }
-    .map { it.first }
-asteriods
-val a58 = asteriods.find { it == Sol10.Pos(5, 8) }!!
-a58
-val parts = asteriods.partition { it.x == a58.x }
-parts.first.size
-parts.second
-
-val detected = asteriods.map { a ->
-    val ps = asteriods.partition { it.x == a.x }
-
-}
-//val detected = asteriods
-//    .map { a -> a to asteriods
-//        .filterNot { it == a }
-//        .groupBy { p -> a.angle(p).toString() }}
+val belt = ".#..##.###...#######\n" +
+        "##.############..##.\n" +
+        ".#.######.########.#\n" +
+        ".###.#######.####.#.\n" +
+        "#####.##.#.##.###.##\n" +
+        "..#####..#.#########\n" +
+        "####################\n" +
+        "#.####....###.#.#.##\n" +
+        "##.#################\n" +
+        "#####.##.###..####..\n" +
+        "..######..##.#######\n" +
+        "####.##.####...##..#\n" +
+        ".#####..#.######.###\n" +
+        "##...#.##########...\n" +
+        "#.##########.#######\n" +
+        ".####.#.###.###.#.##\n" +
+        "....##.##.###..#####\n" +
+        ".#.#.###########.###\n" +
+        "#.#.#.#####.####.###\n" +
+        "###.##.####.##.#..##"
+val s = belt.split('\n')
+val asteroids = s
+    .withIndex()
+    .flatMap { (y, r) ->
+        r
+            .withIndex()
+            .filter { (_, c) -> c != '.' }
+            .map { (x, _) -> Point(x, y) }
+    }
+asteroids
+val laserPoint = Point(11, 13)
+asteroids.contains(laserPoint)
+val sortedAsteroids = asteroids.asSequence().filterNot { it == laserPoint }
+    .map { it to (laserPoint.angle(it) - 90 to laserPoint.distance(it)) }
+    .sortedBy { (_, a) -> a.first }
+    .groupBy({ it.second.first }, { it.first })
+    .map { (a, ps) -> a to ps }.toList()
+sortedAsteroids
+val parts = sortedAsteroids.partition { it.first < 0 }
+val sa = parts.second + parts.first.map { -1 * it.first + 90 to it.second }
+val cnt = sa.map { it.second }.count()
+cnt
+val ordered = sa.map { it.second }
+    .withIndex()
+    .flatMap { (outer, list) ->
+        list
+            .mapIndexed { inner, p -> inner * cnt + outer to p }
+    }
+ordered.sortedBy { it.first }.map { it.second }[199]

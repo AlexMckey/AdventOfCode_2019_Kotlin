@@ -1,8 +1,20 @@
 package AOCLib
 
+import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 data class Point(val x: Int, val y: Int) {
+    override fun toString(): String = "[x:$x,y:$y]"
+    operator fun plus(other: Point) = Point(other.x + x, other.y + y)
+    operator fun minus(other: Point) = Point(other.x - x, other.y - y)
+    fun angle(other: Point) = atan2((other - this).y.toDouble(), (other - this).x.toDouble()) * 180 / PI
+    fun distance(other: Point): Double {
+        val delta = other - this
+        return sqrt(1.0 * delta.x * delta.x + delta.y * delta.y)
+    }
+
     companion object {
         fun incXPoint(): (Point) -> Point = { p -> Point(p.x + 1, p.y) }
         fun decXPoint(): (Point) -> Point = { p -> Point(p.x - 1, p.y) }
