@@ -9,7 +9,7 @@ fun main() {
 
     val robot1 = PaintingRobot(program.toLongArray())
     robot1.runRobot()
-    val res1 = robot1.panelPaintedWhite.size
+    val res1 = robot1.paintedWhite.size
     println(res1)
 
     val robot2 = PaintingRobot(program.toLongArray(), 1)
