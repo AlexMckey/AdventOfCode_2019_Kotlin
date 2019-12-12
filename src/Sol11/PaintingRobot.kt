@@ -4,12 +4,12 @@ import AOCLib.CompState
 import AOCLib.Computer
 import AOCLib.Point
 
-class PaintingRobot(program: LongArray) {
+class PaintingRobot(program: LongArray, start: Long = 0L) {
     val colorCnt: MutableMap<Long, Int> = mutableMapOf(0L to 0, 1L to 0)
     val panelPaintedWhite: MutableSet<Point> = mutableSetOf()
     val panelPaintedBlack: MutableSet<Point> = mutableSetOf()
     private var curPos = Point(0, 0)
-    private val grid: MutableMap<Point, Long> = mutableMapOf(curPos to 0L)
+    private val grid: MutableMap<Point, Long> = mutableMapOf(curPos to start)
     private var curDir = 0
     private val brain = Computer(program)
 

@@ -7,11 +7,14 @@ fun main() {
     val inputStream = File(fileName).bufferedReader().readLine()
     val program = inputStream.split(',').map { it.toLong() }
 
-    val robot = PaintingRobot(program.toLongArray())
-    robot.runRobot()
-    val res1 = robot.panelPaintedWhite.size
+    val robot1 = PaintingRobot(program.toLongArray())
+    robot1.runRobot()
+    val res1 = robot1.panelPaintedWhite.size
     println(res1)
-    println(robot.panelPaintedWhite)
-    println(robot.panelPaintedBlack)
-    println(robot.colorCnt)
+
+    val robot2 = PaintingRobot(program.toLongArray(), 1L)
+    robot2.runRobot()
+    val res2 = robot2.panelPaintedWhite.size
+    println(res2)
+    println(robot2.panelPaintedWhite)
 }
