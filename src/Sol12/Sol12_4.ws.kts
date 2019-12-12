@@ -21,39 +21,27 @@ fun step(ms: List<Moon>) = ms.map { m ->
     newMoon
 }
 
-var h0 = mutableSetOf(moons[0])
-var h1 = mutableSetOf(moons[1])
-var h2 = mutableSetOf(moons[2])
-var h3 = mutableSetOf(moons[3])
-var res = mutableListOf(0, 0, 0, 0)
+fun pvs(ms: List<Moon>) = ms.flatMap {
+    listOf(
+        'x' to (it.pos.x to it.vel.x),
+        'y' to (it.pos.y to it.vel.y),
+        'z' to (it.pos.z to it.vel.z)
+    )
+}
+
+fun byCoord(ms: List<Moon>) = pvs(ms).groupBy({ it.first }, { it.second }).values
+byCoord(moons)
+
+var hs = byCoord(moons).map { mutableSetOf(it) }
 var state = moons
-var cnt = 0
-var steps = 0
+var done = listOf(false, false, false)
 do {
     state = step(state)
-    if (res[0] != 0 && h0.contains(state[0])) {
-        res[0] = steps
-        cnt++
-    } else h0.add(state[0])
-    if (res[1] != 0 && h1.contains(state[1])) {
-        res[1] = steps
-        cnt++
-    } else h1.add(state[1])
-    if (res[2] != 0 && h2.contains(state[2])) {
-        res[2] = steps
-        cnt++
-    } else h2.add(state[2])
-    if (res[3] != 0 && h3.contains(state[3])) {
-        res[3] = steps
-        cnt++
-    } else h3.add(state[3])
-    steps++
-} while (cnt < 4)
+    done = hs.zip(byCoord(state)).map { it.first.add(it.second) }
+} while (done.all { it })
+val per = hs.map { it.size }
+println(per)
 fun gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
 fun lcm(a: Int, b: Int): Int = (a * b).absoluteValue / gcd(a, b)
-//state
-h0
-h1
-h2
-h3
-res
+val res2 = per.reduce(::lcm)
+println(res2)

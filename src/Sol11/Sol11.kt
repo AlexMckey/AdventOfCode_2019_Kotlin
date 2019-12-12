@@ -11,6 +11,7 @@ fun main() {
     robot1.runRobot()
     val res1 = robot1.paintedWhite.size
     println(res1)
+    robot1.draw()
 
     val robot2 = PaintingRobot(program.toLongArray(), 1)
     robot2.runRobot()
