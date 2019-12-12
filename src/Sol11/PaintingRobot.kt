@@ -5,9 +5,7 @@ import AOCLib.Computer
 import AOCLib.Point
 
 class PaintingRobot(program: LongArray, start: Long = 0L) {
-    val colorCnt: MutableMap<Long, Int> = mutableMapOf(0L to 0, 1L to 0)
-    val panelPaintedWhite: MutableSet<Point> = mutableSetOf()
-    val panelPaintedBlack: MutableSet<Point> = mutableSetOf()
+    val paintedWhite: MutableSet<Point> = mutableSetOf()
     private var curPos = Point(0, 0)
     private val grid: MutableMap<Point, Long> = mutableMapOf(curPos to start)
     private var curDir = 0
@@ -17,14 +15,12 @@ class PaintingRobot(program: LongArray, start: Long = 0L) {
         if (brain.output.size < 2) return
         val color = brain.output.removeAt(0)
         val turn = brain.output.removeAt(0)
-        if (color == 1L) panelPaintedWhite.add(curPos)
-        else panelPaintedBlack.add(curPos)
-        colorCnt[color] = colorCnt[color]!! + 1
+        if (color == 1L) paintedWhite.add(curPos)
         curDir += if (turn == 0L) 1 else -1
         curDir = (curDir + 4) % 4
         val forwardStep = when (curDir) {
-            0 -> Point.incYPoint()
-            2 -> Point.decYPoint()
+            2 -> Point.incYPoint()
+            0 -> Point.decYPoint()
             3 -> Point.incXPoint()
             1 -> Point.decXPoint()
             else -> { p -> p }
@@ -43,5 +39,21 @@ class PaintingRobot(program: LongArray, start: Long = 0L) {
                 grid[curPos] = 0L
             brain.input.add(grid[curPos]!!)
         } while (brain.state != CompState.Halt)
+    }
+
+    fun draw() {
+        val minX = paintedWhite.minBy { it.x }!!.x
+        val maxX = paintedWhite.maxBy { it.x }!!.x
+        val minY = paintedWhite.minBy { it.y }!!.y
+        val maxY = paintedWhite.maxBy { it.y }!!.y
+        for (y in minY..maxY) {
+            for (x in minX..maxX) {
+                when (grid.getOrDefault(Point(x, y), 0L)) {
+                    0L -> print(" ")
+                    1L -> print("#")
+                }
+            }
+            println()
+        }
     }
 }
