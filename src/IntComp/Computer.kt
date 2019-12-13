@@ -17,7 +17,7 @@ private fun Char.toParameterMode(): ParameterMode {
 }
 
 class Computer(program: LongArray?) {
-    private var memory: LongArray = LongArray(10000) { 0 }
+    var memory: LongArray = LongArray(10000) { 0 }
     operator fun get(address: Int) = memory[address]
     operator fun set(address: Int, value: Long) {
         memory[address] = value
