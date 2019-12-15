@@ -1,7 +1,6 @@
 package Sol03
 
 import AOCLib.Point
-import AOCLib.manhattanDistance
 import AOCLib.scanM
 import java.io.File
 import kotlin.streams.toList
@@ -39,7 +38,7 @@ fun main() {
 
     val intersectPoints = w1pts.intersect(w2pts)
 
-    val distances = intersectPoints.map { manhattanDistance(it) }.toList()
+    val distances = intersectPoints.map { it.manhattanDistance() }.toList()
 
     val res1 = distances.min()!!
     println(res1) //1064

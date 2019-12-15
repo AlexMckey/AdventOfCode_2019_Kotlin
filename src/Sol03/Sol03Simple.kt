@@ -1,7 +1,6 @@
 package Sol03
 
 import AOCLib.Point
-import AOCLib.manhattanDistance
 import java.io.File
 import kotlin.streams.toList
 
@@ -38,7 +37,7 @@ fun main() {
     val wire2 = wiresPoints.last()
     val intersectPoints = wire1.keys.intersect(wire2.keys)
 
-    val res1 = intersectPoints.map { manhattanDistance(it) }.min()!!
+    val res1 = intersectPoints.map { it.manhattanDistance() }.min()!!
     println(res1) //1064
 
     val pathToIntersectPoints = intersectPoints.map { wire1[it]!! + wire2[it]!! }
