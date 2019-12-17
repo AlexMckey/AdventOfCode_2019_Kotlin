@@ -7,7 +7,7 @@ fun main() {
     val inputStream = File(fileName).bufferedReader().readLine()
     val program = inputStream.split(',').map { it.toLong() }
     val droid = RD(program.toLongArray())
-    droid.runGame(autoExplorer = true, debug = true)
-    val res1 = "DONE!!!"
-    println(res1) //
+    droid.runGame(autoExplorer = true)
+    val res1 = droid.pathToOxygen()
+    println(res1.size) //
 }

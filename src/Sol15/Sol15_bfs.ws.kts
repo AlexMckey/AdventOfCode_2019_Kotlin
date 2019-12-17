@@ -1,7 +1,7 @@
 import Sol15.Block
 import Sol15.Pos
 import Sol15.bfs
-import Sol15.path
+import Sol15.findPath
 
 val grid: MutableMap<Pos, Block> = mutableMapOf()
 grid.withDefault { Block.Unknown }
@@ -30,5 +30,5 @@ val bfsTree: Map<Pos, Pair<Pos, Int>> = bfs(droidPos, setOf(goalPos), grid)
 bfsTree
 bfsTree.size
 bfs(droidPos, setOf(goalPos), grid)
-val ps = path(droidPos, goalPos, grid, false).zipWithNext().map { posToDir(it.first - it.second) }
+val ps = findPath(droidPos, goalPos, grid).zipWithNext().map { (it.first - it.second).toDir() }
 ps

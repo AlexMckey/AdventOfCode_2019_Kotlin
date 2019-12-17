@@ -25,7 +25,7 @@ fun bfs(startPos: Pos, endPos: Set<Pos>, grid: Map<Pos, Block>): Map<Pos, Pair<P
     return helper(emptyMap(), mapOf(startPos to (startPos to 0)))
 }
 
-fun path(startPos: Pos, endPos: Pos, grid: Map<Pos, Block>, reversed: Boolean = true): List<Pos> {
+fun findPath(startPos: Pos, endPos: Pos, grid: Map<Pos, Block>, reversed: Boolean = false): List<Pos> {
     val bfsTree = bfs(startPos, setOf(endPos), grid)
     var current = endPos
     val res = mutableListOf(current)

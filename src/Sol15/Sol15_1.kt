@@ -1,21 +1,13 @@
 package Sol15
 
+import java.io.File
+
 fun main() {
-    val grid: MutableMap<Pos, Block> = mutableMapOf()
-    grid.withDefault { Block.Unknown }
-    val droidPos = Pos.Zero
-    println(droidPos)
-    grid[Pos.Zero] = Block.Empty
-    grid[droidPos + Pos.toLeft] = Block.Wall
-    grid[droidPos + Pos.toRight] = Block.Wall
-    grid[droidPos + Pos.toUp] = Block.Wall
-    grid[droidPos + Pos.toDown] = Block.Empty
-    grid[droidPos + Pos.toDown + Pos.toDown] = Block.Empty
-    grid[droidPos + Pos.toDown + Pos.toDown + Pos.toDown] = Block.Empty
-    grid[droidPos + Pos.toDown + Pos.toDown + Pos.toDown + Pos.toLeft] = Block.Oxygen
-    println(grid)
-    val goalPos = droidPos + Pos.toDown + Pos.toDown + Pos.toDown + Pos.toLeft
-    println(goalPos)
-    val path = bfs(droidPos, setOf(goalPos), grid)
-    println(path)
+    val fileName = "out/production/KtAOC2019/Sol15/input15.txt"
+    val inputStream = File(fileName).bufferedReader().readLine()
+    val program = inputStream.split(',').map { it.toLong() }
+    val droid = RD(program.toLongArray())
+    droid.runGame(autoExplorer = true)
+    val res1 = "DONE!!!"
+    println(res1)
 }
