@@ -5,17 +5,16 @@ fun bfs(startPos: Pos, endPos: Set<Pos>, grid: Map<Pos, Block>): Map<Pos, Pair<P
     fun isFree(pos: Pos, grid: Map<Pos, Block>): Boolean =
         grid[pos] == Block.Empty || grid[pos] == Block.Oxygen
 
-    fun helper(visited: Map<Pos, Pair<Pos, Int>>, toVisit: Map<Pos, Pair<Pos, Int>>): Map<Pos, Pair<Pos, Int>> {
+    tailrec fun helper(visited: Map<Pos, Pair<Pos, Int>>, toVisit: Map<Pos, Pair<Pos, Int>>): Map<Pos, Pair<Pos, Int>> {
         val neighbors = toVisit
             .flatMap { me ->
                 me.key
                     .near()
                     .filter { isFree(it, grid) }
                     .map { p -> p to (me.key to me.value.second + 1) }
-            }
-            .toMap()
+            }.toMap()
         val newVisited = visited + toVisit
-        val newToVisit = neighbors - visited.keys
+        val newToVisit = neighbors.filterNot { visited.containsKey(it.key) }
         return if (newToVisit.isEmpty() || (toVisit.keys intersect endPos).isNotEmpty())
             newVisited
         else

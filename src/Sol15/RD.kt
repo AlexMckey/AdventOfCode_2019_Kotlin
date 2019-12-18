@@ -11,6 +11,15 @@ enum class Dir(val id: Long) {
     W(3L),
     E(4L);
 
+    fun toOffset(): Pos =
+        when (this) {
+            U -> Pos.Zero
+            N -> Pos.toUp
+            S -> Pos.toDown
+            W -> Pos.toLeft
+            E -> Pos.toRight
+        }
+
     companion object {
         fun of(ch: Char): Dir = valueOf(ch.toString())
     }
@@ -65,6 +74,8 @@ class RD(program: LongArray) {
     private var droidPos = Pos.Zero
     private var oxygenPos: Pos? = null
     private var goalPos: Pair<Pos, Pos> = Pos.Zero to Pos.Zero
+    var oxygenPath: List<Pos>? = null
+    var allExplored: Boolean = false
     private val brain = Computer(program)
 
     init {
@@ -72,33 +83,47 @@ class RD(program: LongArray) {
         grid[droidPos] = Block.Empty
     }
 
-    fun runGame(autoExplorer: Boolean = false) {
+    fun runGame(autoExplorer: Boolean = false, findOxygen: Boolean = true, displayGrid: Boolean = false) {
         var done: Boolean
+        val path: MutableList<Dir> = mutableListOf()
+        var goal: Dir = Dir.U
         do {
+            if (!findOxygen && allExplored) break
             if (brain.state == CompState.InputSuspend) {
-                val path = if (autoExplorer) calcNextMove()
-                else getManualMove()
-                brain.input.addAll(path.map { it.id })
+                if (path.isEmpty())
+                    path.addAll(
+                        if (autoExplorer)
+                            calcNextMove()
+                        else getManualMove()
+                    )
+                if (!findOxygen && allExplored) break
+                goal = path.removeAt(0)
+                brain.input.add(goal.id)
             }
             brain.runProgram()
-            updateGrid()
-            displayGame()
+            updateGrid(droidPos + goal.toOffset())
+            if (displayGrid) displayGame()
             done = oxygenPos != null && oxygenPos == droidPos
+            if (!findOxygen) done = done && allExplored
         } while (brain.state != CompState.Halt && !done)
-        // что делать после удачного поиска?
+        oxygenPath = pathToOxygen().drop(1)
+        displayGame()
     }
 
-    private fun updateGrid() {
+    private fun updateGrid(goal: Pos) {
         if (brain.output.size == 0) return
         val out = brain.output.removeAt(0)
-        grid[goalPos.first] = Block.of(out)
-        droidPos = goalPos.second
+        grid[goal] = Block.of(out)
+        if (grid[goal] == Block.Empty || grid[goal] == Block.Oxygen) droidPos = goal
         if (out == Block.Oxygen.id) oxygenPos = droidPos
     }
 
     private fun calcNextMove(): MutableList<Dir> {
         toVisit.putAll((droidPos.near() - grid.keys).map { it to droidPos }.toMap())
-        goalPos = toVisit.entries.first().toPair()
+        allExplored = toVisit.isEmpty()
+        if (allExplored) return mutableListOf()
+        goalPos = toVisit.minBy { droidPos.manhattanDistance(it.key) }!!.toPair()
+        //goalPos = toVisit.entries.first().toPair()
         toVisit.remove(goalPos.first)
         val path = if (droidPos.manhattanDistance(goalPos.first) == 1) listOf(goalPos.second, goalPos.first)
         else findPath(goalPos.second, droidPos, grid) + goalPos.first
@@ -107,7 +132,7 @@ class RD(program: LongArray) {
 
     private fun getManualMove(): MutableList<Dir> {
         print("Move Droid to North [W] or South [S] or West [A] or East [D]:")
-        var key: Char = ' '
+        var key = ' '
         var code: Int
         while (-1 != System.`in`.read().also { code = it }) {
             key = code.toChar().toUpperCase()
@@ -123,13 +148,20 @@ class RD(program: LongArray) {
             'D' -> 'E'
             else -> ' '
         }
-        return mutableListOf(Dir.of(key))
+        val dir = Dir.of(key)
+        //goalPos = droidPos + dir.toOffset() to droidPos
+        return mutableListOf(dir)
     }
 
-    fun pathToOxygen(): List<Pos> =
+    private fun pathToOxygen(): List<Pos> =
         if (oxygenPos != null)
-            findPath(oxygenPos!!, startPos, grid) + goalPos.first
+            findPath(oxygenPos!!, startPos, grid)
         else emptyList()
+
+    fun minutesToFillOxygen(): Int {
+        val bfs = bfs(oxygenPos!!, emptySet(), grid).maxBy { it.value.second }
+        return bfs!!.value.second
+    }
 
     fun displayGame() {
         ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor() // Win8
@@ -144,10 +176,13 @@ class RD(program: LongArray) {
         for (y in maxY.downTo(minY)) {
             for (x in minX..maxX) {
                 if (Pos(x, y) == droidPos) print("@")
+                else if (Pos(x, y) == startPos) print("$")
+                else if (oxygenPath != null && oxygenPath!!.contains(Pos(x, y)))
+                    print("#")
                 else when (grid[Pos(x, y)]) {
                     Block.Empty -> print(".")
                     Block.Oxygen -> print("*")
-                    Block.Wall -> print("#")
+                    Block.Wall -> print("█")
                     else -> print(" ")
                 }
             }

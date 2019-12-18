@@ -26,7 +26,7 @@ fun posToDir(pos: Pos): Char =
         else -> ' '
     }
 
-val bfsTree: Map<Pos, Pair<Pos, Int>> = bfs(droidPos, setOf(goalPos), grid)
+val bfsTree = bfs(droidPos, setOf(goalPos), grid)
 bfsTree
 bfsTree.size
 bfs(droidPos, setOf(goalPos), grid)
