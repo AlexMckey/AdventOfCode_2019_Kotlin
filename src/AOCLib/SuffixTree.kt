@@ -1,4 +1,4 @@
-package Sol17
+package AOCLib
 
 import java.util.*
 import kotlin.collections.HashMap

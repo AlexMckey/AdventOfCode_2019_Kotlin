@@ -1,22 +1,35 @@
-import Sol17.LRS
+import Sol17.Pos
 
-//val prog =
-//    "L,12,R,8,L,10,L,10,R,6,R,4,R,12,R,12,R,12,L,8,L,10,L,10,R,6,R,4,R,12,L,10,R,8,R,4,L,10,R,6,R,4,R,12,R,12,R,8,L,10,L,10,L,10,R,8,R,4,L,10,R,6,R,4,R,12,L,10,R,8,R,4,L,10"
-val prog = "R,8,R,8,R,4,R,4,R,8,L,6,L,2,R,4,R,4,R,8,R,8,R,8,L,6,L,2"
-LRS.lrs(prog)
-val progl1 = prog.split(",")
-val a = LRS.lrs(progl1)
-a
-val astr = a.joinToString(",")
-val proga = prog.replace(astr, "A")
-val progl2 = proga.split(",")
-val b = LRS.lrs(progl2)
-b
-val bstr = b.joinToString(",")
-val progb = proga.replace(bstr, "B")
-val progl3 = progb.split(",")
-val c = LRS.lrs(progl3)
-c
-val cstr = c.joinToString(",")
-val progc = progb.replace(cstr, "C")
-progc
+val out = "#######...#####\n" +
+        "#.....#...#...#\n" +
+        "#.....#...#...#\n" +
+        "......#...#...#\n" +
+        "......#...###.#\n" +
+        "......#.....#.#\n" +
+        "^########...#.#\n" +
+        "......#.#...#.#\n" +
+        "......#########\n" +
+        "........#...#..\n" +
+        "....#########..\n" +
+        "....#...#......\n" +
+        "....#...#......\n" +
+        "....#...#......\n" +
+        "....#####......".split("\n")
+val grid = out
+    .split("\n")
+    .withIndex()
+    .flatMap { yv -> yv.value.mapIndexed { x, c -> Pos(x, yv.index) to c } }
+    .toMap()
+grid
+val robotPos = grid.filterValues { "v^><".contains(it) }.keys.first()
+robotPos
+val scaffolds = grid.filterValues { "#v^><".contains(it) }
+val ns = robotPos.near() intersect scaffolds.keys
+val curDir = when (scaffolds[robotPos]) {
+    '^' -> "Up"
+    '>' -> "Left"
+    '<' -> "Right"
+    'v' -> "Down"
+    else -> ""
+}
+curDir

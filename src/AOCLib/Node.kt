@@ -22,8 +22,8 @@ class Node(
             return returnData
         }
 
-    override operator fun compareTo(o: Any?): Int { //return name.compareTo(((Node) o).getName());
-        val sum = (o as Node).fSum()
+    override operator fun compareTo(other: Any?): Int { //return name.compareTo(((Node) o).getName());
+        val sum = (other as Node).fSum()
         return sum.compareTo(fSum())
     }
 
