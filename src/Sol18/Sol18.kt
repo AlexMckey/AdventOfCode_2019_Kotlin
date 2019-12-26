@@ -11,11 +11,26 @@ fun main() {
         .toMap()
     val optMaze = grid.filterValues { it != '#' }
     val keys = optMaze.filterValues { it.isLetter() && it.isLowerCase() }
+    println(keys)
     val doors = optMaze.filterValues { it.isLetter() && it.isUpperCase() }
     val entry = optMaze.filterValues { it == '@' }.keys.first()
+    val keysWithEntry = keys + (entry to optMaze[entry])
 
-    val bfs = bfs(entry, keys.keys.toSet(), optMaze)
-    println(bfs)
+    var bfsKeys = keysWithEntry.keys.map { kp ->
+        oldbfs(kp, keysWithEntry.keys.toSet() - kp, optMaze)
+            .filterKeys { keysWithEntry.keys.contains(it) && it != kp }
+            .map { pv -> keysWithEntry[kp] to (keysWithEntry[pv.key] to pv.value.second) }
+            .groupBy({ it.first }, { it.second })
+    }
+    println(bfsKeys)
+    val fk1 = bfsKeys.find { it.keys.contains('@') }!!.map { it.value.minBy { it.second } }.first()
+    val visited = mutableSetOf('@')
+    println(fk1)
+    bfsKeys =
+        bfsKeys.filterNot { visited.containsAll(it.keys) }//.map { me -> me.map { list -> list.key to (list.value.filterNot { pair -> visited.contains(pair.first) }) } }
+    println(bfsKeys)
+    val fk2 = bfsKeys.find { it.keys.contains(fk1!!.first) }!!.map { it.value.minBy { it.second } }.first()
+    println(fk2)
 
     val res1 = 0
     println(res1) //
