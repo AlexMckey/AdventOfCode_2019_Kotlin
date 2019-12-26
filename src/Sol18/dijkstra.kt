@@ -11,7 +11,7 @@ fun dijkstra(graph: Map<Char, Map<Char, Pair<Int, Set<Char>>>>, start: Char): Mu
         node = toVisit.minBy { it.dist }!!
         toVisit.remove(node)
         val neighbors = graph[node.key]!!
-            //.filterKeys { ch -> ch !in visited.keys }
+            .filterKeys { ch -> ch !in node.doors }
             //.filterValues { p -> (p.second - visited.keys).isEmpty() }
             .filterValues { checkDoorsAndKeys(it.second, node.doors + node.key - start) }
         if (neighbors.isEmpty()) continue
