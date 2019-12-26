@@ -1,5 +1,4 @@
 import Sol17.Pos
-import Sol17.SuffixTree
 
 val output = "..#..........\n" +
         "..#..........\n" +
