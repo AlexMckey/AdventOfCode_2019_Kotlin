@@ -17,7 +17,7 @@ private fun Char.toParameterMode(): ParameterMode {
 }
 
 class Computer(program: LongArray?) {
-    var memory: LongArray = LongArray(10000) { 0 }
+    var memory: LongArray = LongArray(100000) { 0 }
     operator fun get(address: Int) = memory[address]
     operator fun set(address: Int, value: Long) {
         memory[address] = value
@@ -48,11 +48,18 @@ class Computer(program: LongArray?) {
     private var ip: Int = 0
     private var step: Int = 0
     private var relativeBase: Int = 0
-    var state: CompState = CompState.Halt
+    var state = CompState.Halt
     var input = mutableListOf<Long>()
     var output = mutableListOf<Long>()
     val result: Long
         get() = memory[0]
+
+    fun reset() {
+        ip = 0
+        step = 0
+        relativeBase = 0
+        state = CompState.Halt
+    }
 
     private fun doOneStep() {
         when (memory[ip] % 100) {
